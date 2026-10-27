@@ -1,0 +1,658 @@
+/* Retrato dos concellos · Fundación Galicia Sustentable
+   Fontes servidas desde este sitio; nada doutra orixe. */
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-ext-600-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/source-sans-3-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* FGS design tokens, as in Galicia Agora (galiciasustentable-html skill v4.1; colours as in
+   fgs-web tokens.css). */
+
+:root {
+  color-scheme: light dark;
+
+  --gs-verde-nato: #4a5846;
+  --gs-verde-nato-50: rgba(74, 88, 70, 0.08);
+  --gs-verde-nato-90: rgba(74, 88, 70, 0.92);
+  --gs-verde-claro: #6b8f47;
+  --gs-verde-moi-claro: #e8efe3;
+
+  --gs-branco: #ffffff;
+  --gs-gris-05: #fafaf7;
+  --gs-gris-10: #f5f5f0;
+  --gs-gris-20: #e8e8e2;
+  --gs-gris-50: #6c6c64;
+  --gs-gris-80: #3e3e38;
+  --gs-negro: #1a1a17;
+
+  --gs-terra: #8b5e3c;
+  --gs-azul: #2e6b8a;
+  --gs-viola: #6b4c8a;
+  --gs-oliva: #7a7a2e;
+
+  --gs-exito: #4a7c59;
+  --gs-aviso: #c8872b;
+  --gs-erro: #a64040;
+
+  /* Skill v4, perfil «divulgación e técnico»: Source Sans 3 en títulos, corpo e
+     interface. Trebuchet MS só no logotipo; Playfair e Newsreader non se usan aquí. */
+  --gs-font-titulos: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --gs-font-corpo: "Source Sans 3", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --gs-texto-xs: 0.75rem;
+  --gs-texto-sm: 0.875rem;
+  --gs-texto-base: 1rem;
+  --gs-texto-lg: 1.125rem;
+  --gs-texto-xl: 1.375rem;
+  --gs-texto-2xl: 1.75rem;
+  --gs-texto-3xl: 2.25rem;
+
+  --gs-radius: 4px;
+  --gs-radius-card: 8px;
+  --gs-sombra: 0 2px 12px rgba(26, 26, 23, 0.14);
+
+  /* Semantic surfaces */
+  --bg: var(--gs-gris-05);
+  --surface: var(--gs-branco);
+  --surface-2: var(--gs-gris-10);
+  --border: var(--gs-gris-20);
+  --text: var(--gs-gris-80);
+  --text-muted: var(--gs-gris-50);
+  --heading: var(--gs-verde-nato);
+  --link: var(--gs-verde-nato);
+  --link-hover: var(--gs-verde-claro);
+  --header-bg: var(--gs-verde-nato);
+  --header-text: var(--gs-branco);
+  --focus: #1f5fa8;
+
+  /* Freshness states (text on --surface meets 4.5:1) */
+  --st-fresh: var(--gs-exito);
+  --st-stale: #8a5a12;
+  --st-failed: var(--gs-erro);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161714;
+    --surface: #1f201c;
+    --surface-2: #272823;
+    --border: #3a3b35;
+    --text: #e6e6df;
+    --text-muted: #b3b3aa;
+    --heading: #c9d8bd;
+    --link: #c9d8bd;
+    --link-hover: #e8efe3;
+    --header-bg: #2c3529;
+    --focus: #8ab4f8;
+    --st-fresh: #7fbf8e;
+    --st-stale: #e0a95a;
+    --st-failed: #e08a8a;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #161714;
+  --surface: #1f201c;
+  --surface-2: #272823;
+  --border: #3a3b35;
+  --text: #e6e6df;
+  --text-muted: #b3b3aa;
+  --heading: #c9d8bd;
+  --link: #c9d8bd;
+  --link-hover: #e8efe3;
+  --header-bg: #2c3529;
+  --focus: #8ab4f8;
+  --st-fresh: #7fbf8e;
+  --st-stale: #e0a95a;
+  --st-failed: #e08a8a;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--gs-font-corpo);
+  font-size: var(--gs-texto-lg);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--gs-font-titulos);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--heading);
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 0.2em;
+}
+a:hover {
+  color: var(--link-hover);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -48px;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: var(--gs-radius);
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+
+/* Cabeceira (criterios FGS): fondo verde nato, logo extendido branco a 55 px, un só logo. */
+.cn-header {
+  background: var(--gs-verde-nato);
+  color: var(--gs-branco);
+}
+.cn-header .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+}
+.cn-ident {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.cn-ident img {
+  height: 55px;
+  width: auto;
+  display: block;
+}
+.cn-sep {
+  width: 1px;
+  height: 36px;
+  background: rgba(232, 239, 227, 0.45);
+}
+.cn-nome {
+  color: var(--gs-branco);
+  font-weight: 700;
+  font-size: var(--gs-texto-xl);
+  text-decoration: none;
+}
+.cn-header nav {
+  display: flex;
+  gap: 16px;
+  font-size: var(--gs-texto-sm);
+}
+.cn-header nav a {
+  color: var(--gs-verde-moi-claro);
+}
+.cn-header nav a:hover {
+  color: var(--gs-branco);
+}
+@media (max-width: 560px) {
+  .cn-ident img {
+    height: 40px;
+  }
+  .cn-sep {
+    height: 28px;
+  }
+  .cn-nome {
+    font-size: var(--gs-texto-lg);
+  }
+}
+/* Header height used by the sticky stage. */
+:root {
+  --cn-header-h: 79px;
+}
+
+.rt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--gs-texto-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.rt-badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.rt-badge[data-status="fresh"] {
+  color: var(--st-fresh);
+}
+.rt-badge[data-status="stale"] {
+  color: var(--st-stale);
+}
+.rt-badge[data-status="failed"],
+.rt-badge[data-status="none"] {
+  color: var(--st-failed);
+}
+
+
+/* Pé estándar da FGS (o mesmo de Galicia Agora). */
+  .gs-footer {
+    background: var(--gs-verde-nato);
+    color: var(--gs-verde-moi-claro);
+    font-family: var(--gs-font-corpo);
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 48px 48px 24px;
+  }
+  .gs-footer a {
+    color: var(--gs-verde-moi-claro);
+    text-underline-offset: 0.2em;
+  }
+  .gs-footer a:hover {
+    color: var(--gs-branco);
+  }
+  .gs-footer h2 {
+    font-family: var(--gs-font-corpo);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gs-branco);
+    margin: 0 0 12px;
+    border: 0;
+    padding: 0;
+  }
+  .gs-footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .gs-footer li {
+    margin: 6px 0;
+  }
+  .gs-footer__grid {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 2fr 1fr 1fr 1.4fr;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .gs-footer__marca p {
+    margin: 12px 0 0;
+    max-width: 38ch;
+  }
+  .gs-footer__marca img {
+    display: block;
+    height: 60px;
+    width: auto;
+  }
+  .gs-footer__boton {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--gs-branco);
+    color: var(--gs-verde-nato) !important;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: var(--gs-radius);
+    text-decoration: none;
+  }
+  .gs-footer__legal {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(232, 239, 227, 0.25);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .gs-footer__legal nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 800px) {
+    .gs-footer {
+      padding: 36px 20px 20px;
+    }
+    .gs-footer__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+/* Retrato */
+  .rt-app {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--bg);
+    color: var(--text);
+  }
+  .rt-stage-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    order: -1;
+    height: 46dvh;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .rt-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  /* Out of the flow, so its pixel size never feeds back into the stage width. */
+  .rt-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: pan-y;
+  }
+  .rt-side {
+    padding: 16px;
+    min-width: 0;
+  }
+  @media (min-width: 900px) {
+    .rt-app {
+      grid-template-columns: minmax(340px, 420px) 1fr;
+    }
+    .rt-stage-wrap {
+      order: 0;
+      height: calc(100dvh - var(--cn-header-h));
+      top: 0;
+      border-bottom: 0;
+      border-left: 1px solid var(--border);
+    }
+    .rt-side {
+      padding: 24px 28px 40vh;
+    }
+  }
+  .rt-search {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .rt-search label {
+    font-size: var(--gs-texto-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .rt-search input {
+    font: inherit;
+    font-size: var(--gs-texto-lg);
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--gs-radius);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .rt-status {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: var(--gs-texto-sm);
+    color: var(--text-muted);
+  }
+  .rt-card {
+    padding: 20px 0 24px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0.55;
+    transition: opacity 300ms ease;
+    cursor: pointer;
+    outline-offset: 4px;
+    /* scrollIntoView lands the card just under the sticky stage, inside the active band. */
+    scroll-margin-top: 48dvh;
+  }
+  @media (min-width: 900px) {
+    .rt-card {
+      scroll-margin-top: 40dvh;
+    }
+  }
+  .rt-card.is-active,
+  .rt-intro {
+    opacity: 1;
+  }
+  .rt-intro {
+    min-height: 40dvh;
+    cursor: default;
+  }
+  .rt-kicker {
+    margin: 12px 0 0;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--gs-texto-sm);
+  }
+  .rt-name {
+    margin: 0;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    line-height: 1.02;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+  }
+  .rt-facts {
+    margin: 8px 0 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-lede {
+    margin: 20px 0 0;
+    color: var(--text-muted);
+  }
+  .rt-group {
+    margin-top: 40px;
+    padding-top: 8px;
+    border-top: 3px solid var(--heading);
+  }
+  .rt-group h2 {
+    margin: 0;
+    font-size: var(--gs-texto-base);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .rt-source summary {
+    cursor: pointer;
+  }
+  .rt-source {
+    margin: 4px 0 0;
+    font-size: var(--gs-texto-xs);
+    color: var(--text-muted);
+  }
+  .rt-card h3 {
+    margin: 0 0 4px;
+    font-size: var(--gs-texto-base);
+    font-weight: 600;
+  }
+  .rt-value {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+  .rt-value strong {
+    font-size: var(--gs-texto-3xl);
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .rt-galicia,
+  .rt-pos,
+  .rt-meta {
+    margin: 2px 0 0;
+    font-size: var(--gs-texto-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-meta {
+    color: var(--text-muted);
+    font-size: var(--gs-texto-xs);
+  }
+  .rt-mini {
+    display: block;
+    width: 100%;
+    height: 30px;
+    margin: 10px 0 6px;
+  }
+  .rt-mini-ticks {
+    stroke: var(--text-muted);
+    stroke-width: 1;
+    opacity: 0.35;
+    vector-effect: non-scaling-stroke;
+  }
+  .rt-mini-galicia {
+    stroke: var(--text-muted);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .rt-mini-me {
+    stroke: var(--heading);
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .rt-note summary {
+    font-size: var(--gs-texto-xs);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .rt-note p {
+    font-size: var(--gs-texto-sm);
+  }
+  .rt-tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--surface);
+    color: var(--text);
+    border-radius: var(--gs-radius);
+    box-shadow: var(--gs-sombra);
+    padding: 4px 8px;
+    font-size: var(--gs-texto-sm);
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+  .rt-tip[hidden] {
+    display: none;
+  }
+  .rt-stage-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+  }
+  .rt-modes {
+    flex-shrink: 0;
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px;
+    box-shadow: var(--gs-sombra);
+  }
+  .rt-modes button {
+    font: inherit;
+    font-size: var(--gs-texto-sm);
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .rt-modes button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .rt-modes button[aria-pressed="true"]:not(:disabled) {
+    background: var(--heading);
+    color: var(--surface);
+  }
+  .rt-legend {
+    flex: 1;
+    margin: 0;
+    line-height: 1.3;
+    font-size: var(--gs-texto-xs);
+    color: var(--text-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rt-card {
+      transition: none;
+    }
+  }

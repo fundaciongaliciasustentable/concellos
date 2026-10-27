@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="gl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retrato dos concellos — Fundación Galicia Sustentable</title>
+<meta name="description" content="Cada concello fronte aos outros 312: indicadores de poboación, servizos, vivenda e conectividade nun mapa que se reordena.">
+<link rel="canonical" href="https://concellos.galiciasustentable.org/">
+<link rel="alternate" hreflang="gl" href="https://concellos.galiciasustentable.org/">
+<link rel="alternate" hreflang="es" href="https://concellos.galiciasustentable.org/es/">
+<link rel="icon" href="./assets/logos/favicon.svg" type="image/svg+xml">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="./assets/css/concellos.css">
+</head>
+<body>
+<a class="skip-link" href="#contido">Ir ao contido</a>
+<header class="cn-header">
+  <div class="inner">
+    <div class="cn-ident">
+      <a href="https://fundaciongaliciasustentable.gal/"><img src="./assets/logos/logo-fgs-horizontal-branco.png" alt="Fundación Galicia Sustentable" width="129" height="55"></a>
+      <span class="cn-sep" aria-hidden="true"></span>
+      <a class="cn-nome" href="./">Retrato dos concellos</a>
+    </div>
+    <nav aria-label="Retrato dos concellos">
+      <a href="https://agora.galiciasustentable.org/">Datos de Galicia Agora</a>
+      <a href="./es/" lang="es" hreflang="es">Castelán</a>
+    </nav>
+  </div>
+</header>
+
+<div class="rt-app" data-lang="gl" data-base="./">
+  <div class="rt-side">
+    <div class="rt-search">
+      <label for="rt-q">Concello</label>
+      <input id="rt-q" type="search" list="rt-concellos" autocomplete="off" spellcheck="false">
+      <datalist id="rt-concellos"></datalist>
+      <p class="rt-status" role="status">Cargando…</p>
+    </div>
+    <div class="rt-list" id="contido"></div>
+    <p class="rt-updated"></p>
+  </div>
+  <div class="rt-stage-wrap">
+    <div class="rt-stage">
+      <canvas class="rt-canvas" role="img" aria-label="Os concellos de Galicia como puntos. As cifras están no texto de cada indicador."></canvas>
+      <div class="rt-tip" hidden></div>
+      <div class="rt-stage-foot">
+        <p class="rt-legend">Cor: distancia ao valor de Galicia (marrón por debaixo, azul por enriba), non mellor ou peor.</p>
+        <div class="rt-modes" role="group" aria-label="Vista">
+          <button type="button" data-mode="strip" aria-pressed="true">Distribución</button>
+          <button type="button" data-mode="map" aria-pressed="false">Mapa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="gs-footer">
+  <div class="gs-footer__grid">
+    <div class="gs-footer__marca">
+      <p>Organización privada sen ánimo de lucro constituída en 2008 co propósito de transformar Galicia nunha sociedade sustentable.</p>
+      <p>Declarada de interese ambiental e galego en 2009.</p>
+      <p>Código AGPL-3.0. Datos: a licenza de cada fonte, indicada en cada grupo.</p>
+    </div>
+    <nav aria-label="Fundación">
+      <h2>Fundación</h2>
+      <ul>
+        <li><a href="https://fundaciongaliciasustentable.gal/a-fundacion/index.html">A Fundación</a></li>
+        <li><a href="https://fundaciongaliciasustentable.gal/equipo/index.html">Equipo</a></li>
+        <li><a href="https://fundaciongaliciasustentable.gal/transparencia/index.html">Transparencia</a></li>
+        <li><a href="https://fundaciongaliciasustentable.gal/contacto/index.html">Contacto</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="Ecosistema">
+      <h2>Ecosistema</h2>
+      <ul>
+        <li><a href="https://fundaciongaliciasustentable.gal/">Fundación</a></li>
+        <li><a href="https://galiciasustentable.org/proxectos/">Proxectos</a></li>
+        <li><a href="https://galiciasustentable.org/">Revista</a></li>
+        <li><a href="https://fundaciongaliciasustentable.gal/doar/index.html">Doazóns</a></li>
+        <li><a href="https://fundaciongaliciasustentable.gal/medios/index.html">Medios</a></li>
+      </ul>
+    </nav>
+    <div class="gs-footer__apoio">
+      <h2>Apoia a fundación</h2>
+      <p>O teu apoio fai posible o noso traballo.</p>
+      <a class="gs-footer__boton" href="https://fundaciongaliciasustentable.gal/doar/index.html">Doar agora</a>
+    </div>
+  </div>
+  <div class="gs-footer__legal">
+    <span>© 2026 Fundación Galicia Sustentable · CIF G70193537</span>
+    <nav aria-label="Espazo legal">
+      <a href="https://fundaciongaliciasustentable.gal/aviso-legal/index.html">Aviso legal</a>
+      <a href="https://fundaciongaliciasustentable.gal/privacidade/index.html">Privacidade</a>
+      <a href="https://fundaciongaliciasustentable.gal/cookies/index.html">Cookies</a>
+      <a href="https://fundaciongaliciasustentable.gal/politica-ia/index.html">Política de IA</a>
+    </nav>
+  </div>
+</footer>
+
+<script type="module">
+  import { start } from './js/retrato.js';
+  start();
+</script>
+</body>
+</html>
