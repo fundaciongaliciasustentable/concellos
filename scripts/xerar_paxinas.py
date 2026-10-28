@@ -112,7 +112,10 @@ def paxina(lang, t, x):
       <ol class="rt-refs"></ol>
       <details class="rt-compare-add">
         <summary>{x['portrait_compare']}</summary>
-        <input id="rt-ref" type="search" list="rt-concellos" autocomplete="off" spellcheck="false" aria-label="{x['portrait_compare']}">
+        <div class="rt-ref-row">
+          <input id="rt-ref" type="search" list="rt-concellos" autocomplete="off" spellcheck="false" aria-label="{x['portrait_compare']}">
+          <button type="button" class="rt-ref-add">{x['portrait_add']}</button>
+        </div>
         <p class="rt-hint">{x['portrait_compare_hint']}</p>
       </details>
     </div>

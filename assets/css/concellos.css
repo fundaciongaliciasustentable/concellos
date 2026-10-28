@@ -743,10 +743,34 @@ a:hover {
     font-size: var(--gs-texto-xs);
     color: var(--text-muted);
   }
-  @media (hover: none) {
-    .rt-hint {
-      display: none;
-    }
+  .rt-ref-row {
+    display: flex;
+    gap: 6px;
+  }
+  .rt-ref-row input {
+    flex: 1;
+    min-width: 0;
+  }
+  .rt-ref-add {
+    font: inherit;
+    font-size: var(--gs-texto-sm);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--gs-radius);
+    background: var(--surface-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .rt-ref-add:hover,
+  .rt-ref-add:focus-visible {
+    border-color: var(--text-muted);
+  }
+  .rt-ref-add:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .rt-canvas.is-comparing {
+    cursor: copy;
   }
   .rt-ref-n {
     display: inline-grid;

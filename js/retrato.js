@@ -169,7 +169,25 @@ export async function start() {
     }
     concellos.sort((a, b) => a.nome.localeCompare(b.nome, lang));
     const byCode = new Map(concellos.map((c) => [c.code, c]));
-    const byName = new Map(concellos.map((c) => [c.nome.toLocaleLowerCase(lang), c]));
+    // Names are matched without case or accents; a unique start (or part) of a name also works.
+    const plain = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    const plainNames = concellos.map((c) => plain(c.nome));
+    function findConcello(text) {
+        const q = plain(text);
+        if (!q)
+            return null;
+        const exact = plainNames.indexOf(q);
+        if (exact >= 0)
+            return concellos[exact];
+        for (const test of [(n) => n.startsWith(q), (n) => n.includes(q)]) {
+            const hits = concellos.filter((_, i) => test(plainNames[i]));
+            if (hits.length === 1)
+                return hits[0];
+            if (hits.length > 1)
+                return null;
+        }
+        return null;
+    }
     for (const c of concellos)
         datalist.append(el('option', { value: c.nome }));
     // ---- State ------------------------------------------------------------------------------
@@ -632,6 +650,9 @@ export async function start() {
             return li;
         }));
         refInput.disabled = refs.length >= MAX_REFS;
+        const add = app.querySelector('.rt-ref-add');
+        if (add)
+            add.disabled = refInput.disabled;
         refInput.placeholder = refs.length >= MAX_REFS ? (dict.portrait_compare_full ?? '') : '';
     }
     function renderAll() {
@@ -691,11 +712,13 @@ export async function start() {
         writeHash();
         draw();
     }
-    refInput.addEventListener('change', () => {
+    const compare = refInput.closest('details');
+    const refAdd = app.querySelector('.rt-ref-add');
+    function addFromInput() {
         const value = refInput.value.trim();
         if (!value)
             return;
-        const c = byName.get(value.toLocaleLowerCase(lang));
+        const c = findConcello(value);
         if (!c) {
             status.textContent = dict.portrait_not_found ?? '';
             return;
@@ -703,17 +726,33 @@ export async function start() {
         refInput.value = '';
         if (!refs.includes(c))
             toggleRef(c);
+    }
+    // Browsers differ on when 'change' fires for a search field with a list (Safari waits for
+    // blur), so Enter, the button and picking a suggestion each add the concello too.
+    refInput.addEventListener('change', addFromInput);
+    refInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addFromInput();
+        }
     });
+    refInput.addEventListener('input', (e) => {
+        const picked = !e.inputType || e.inputType === 'insertReplacementText';
+        if (picked && plainNames.includes(plain(refInput.value)))
+            addFromInput();
+    });
+    refAdd?.addEventListener('click', addFromInput);
     // The compare field stays folded under a small link; opening it puts the cursor there.
-    refInput.closest('details')?.addEventListener('toggle', (e) => {
-        if (e.target.open)
+    compare?.addEventListener('toggle', () => {
+        if (compare.open)
             refInput.focus();
+        canvas.classList.toggle('is-comparing', compare.open);
     });
     refInput.addEventListener('input', () => {
         status.textContent = '';
     });
     search.addEventListener('change', () => {
-        const c = byName.get(search.value.trim().toLocaleLowerCase(lang));
+        const c = findConcello(search.value);
         if (c)
             select(c);
         else
@@ -755,11 +794,13 @@ export async function start() {
         if (c) {
             const v = valueFor(c);
             tip.textContent = active && v !== null ? `${c.nome} · ${fmt(v)} ${active.ind.unit}` : c.nome;
+            if (compare?.open && c !== selected)
+                tip.textContent += ` — ${refs.includes(c) ? dict.portrait_tap_remove : dict.portrait_tap_compare}`;
             const rect = stage.getBoundingClientRect();
             tip.style.left = `${Math.min(rect.width - 8, e.clientX - rect.left + 12)}px`;
             tip.style.top = `${e.clientY - rect.top + 12}px`;
             tip.hidden = false;
-            canvas.style.cursor = 'pointer';
+            canvas.style.cursor = compare?.open ? 'copy' : 'pointer';
         }
         else {
             tip.hidden = true;
@@ -776,7 +817,8 @@ export async function start() {
         const c = hit(e);
         if (!c)
             return;
-        if (e.shiftKey)
+        // While the compare field is open, a dot adds or removes a reference instead.
+        if (compare?.open || e.shiftKey || e.getModifierState?.('CapsLock'))
             toggleRef(c);
         else
             select(c);
