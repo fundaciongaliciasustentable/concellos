@@ -107,8 +107,16 @@ def paxina(lang, t, x):
       <label for="rt-q">{x['portrait_search']}</label>
       <input id="rt-q" type="search" list="rt-concellos" autocomplete="off" spellcheck="false">
       <datalist id="rt-concellos"></datalist>
-      <p class="rt-status" role="status">{x['loading']}</p>
     </div>
+    <div class="rt-compare">
+      <ol class="rt-refs"></ol>
+      <details class="rt-compare-add">
+        <summary>{x['portrait_compare']}</summary>
+        <input id="rt-ref" type="search" list="rt-concellos" autocomplete="off" spellcheck="false" aria-label="{x['portrait_compare']}">
+        <p class="rt-hint">{x['portrait_compare_hint']}</p>
+      </details>
+    </div>
+    <p class="rt-status" role="status">{x['loading']}</p>
     <div class="rt-list" id="contido"></div>
     <p class="rt-updated"></p>
   </div>

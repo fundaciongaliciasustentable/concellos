@@ -13,6 +13,8 @@ const PROFILE = 'perfil-concellos';
 /** Reading order of the groups; any other joined layer follows. */
 const ORDER = ['indicadores-concellos', PROFILE, 'vut-concello', 'cobertura-banda-larga'];
 const DURATION = 800;
+/** Reference concellos shown next to the selected one. */
+const MAX_REFS = 3;
 const STAGGER = 380;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -77,6 +79,8 @@ export async function start() {
     const list = app.querySelector('.rt-list');
     const status = app.querySelector('.rt-status');
     const search = app.querySelector('.rt-search input');
+    const refInput = app.querySelector('#rt-ref');
+    const refList = app.querySelector('.rt-refs');
     const datalist = app.querySelector('#rt-concellos');
     const foot = app.querySelector('.rt-stage-foot');
     const modeButtons = [...app.querySelectorAll('[data-mode]')];
@@ -173,11 +177,24 @@ export async function start() {
     let selected = byCode.get(params.get('c') ?? '') ?? byCode.get('15078') ?? concellos[0];
     let active = items.find((i) => i.key === params.get('i')) ?? null;
     let mode = params.get('v') === 'map' ? 'map' : 'strip';
+    let refs = readRefs(params);
     let hover = null;
+    function readRefs(p) {
+        const codes = (p.get('r') ?? '').split(',');
+        const out = [];
+        for (const code of codes) {
+            const c = byCode.get(code);
+            if (c && c !== selected && !out.includes(c) && out.length < MAX_REFS)
+                out.push(c);
+        }
+        return out;
+    }
     const writeHash = () => {
         const p = new URLSearchParams();
         if (selected)
             p.set('c', selected.code);
+        if (refs.length)
+            p.set('r', refs.map((c) => c.code).join(','));
         if (active)
             p.set('i', active.key);
         if (mode === 'map')
@@ -356,8 +373,9 @@ export async function start() {
         }
         const sel = selected ? concellos.indexOf(selected) : -1;
         const hov = hover ? concellos.indexOf(hover) : -1;
+        const refIdx = refs.map((c) => concellos.indexOf(c));
         dots.forEach((d, i) => {
-            if (i === sel)
+            if (i === sel || refIdx.includes(i))
                 return;
             ctx.beginPath();
             ctx.arc(d.x, d.y, Math.max(0.5, d.r), 0, Math.PI * 2);
@@ -378,6 +396,7 @@ export async function start() {
             ctx.strokeStyle = text;
             ctx.stroke();
         }
+        drawRefs(refIdx, text, surface);
         if (sel >= 0 && selected) {
             const d = dots[sel];
             const R = Math.max(d.r * 1.9, 7);
@@ -403,6 +422,68 @@ export async function start() {
             const ly = d.y - R - 10;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = surface;
+            ctx.strokeText(label, lx, ly);
+            ctx.fillStyle = text;
+            ctx.fillText(label, lx, ly);
+        }
+    }
+    /**
+     * Reference concellos: the dot in its colour inside a numbered ring, with the name and value
+     * below it (the selected concello's label goes above). Labels that would overlap stack down.
+     */
+    function drawRefs(refIdx, text, surface) {
+        // Boxes the labels must not cover: earlier labels and the marked dots themselves.
+        const placed = [];
+        const sel = selected ? concellos.indexOf(selected) : -1;
+        const marks = [...refIdx, sel].filter((i) => i >= 0).map((i) => {
+            const d = dots[i];
+            const R = Math.max(d.r * 1.9, 7) + 4;
+            return { i, x: d.x, y: d.y - R, w: 2 * R, h: 2 * R };
+        });
+        const order = refIdx.map((i, n) => ({ i, n })).filter((r) => r.i >= 0);
+        order.sort((a, b) => dots[a.i].x - dots[b.i].x);
+        for (const { i, n } of order) {
+            const d = dots[i];
+            const R = Math.max(d.r * 1.5, 5.5);
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, R + 4, 0, Math.PI * 2);
+            ctx.fillStyle = surface;
+            ctx.globalAlpha = 0.85;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, R, 0, Math.PI * 2);
+            ctx.fillStyle = d.color;
+            ctx.fill();
+            ctx.setLineDash([3, 2]);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = text;
+            ctx.stroke();
+            ctx.setLineDash([]);
+            const c = concellos[i];
+            const v = valueFor(c);
+            const label = active && v !== null ? `${n + 1} ${c.nome} · ${fmt(v)}` : `${n + 1} ${c.nome}`;
+            ctx.font = `600 13px ${cssVar('--gs-font-corpo')}`;
+            const w = ctx.measureText(label).width;
+            const lx = Math.min(width - w / 2 - 8, Math.max(w / 2 + 8, d.x));
+            let ly = d.y + R + 6;
+            for (let moved = true, tries = 0; moved && tries < 12; tries++) {
+                moved = false;
+                for (const b of [...placed, ...marks]) {
+                    if (b.i === i)
+                        continue;
+                    if (Math.abs(b.x - lx) < (b.w + w) / 2 + 4 && ly < b.y + b.h && ly + 15 > b.y) {
+                        ly = b.y + b.h + 2;
+                        moved = true;
+                    }
+                }
+            }
+            ly = Math.min(ly, height - 34);
+            placed.push({ x: lx, y: ly, w, h: 15 });
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
             ctx.lineWidth = 4;
             ctx.strokeStyle = surface;
             ctx.strokeText(label, lx, ly);
@@ -460,7 +541,7 @@ export async function start() {
             .filter(Boolean)
             .join(' · ')), el('p', { class: 'rt-lede' }, fill(dict.portrait_lede ?? '', { n: concellos.length })));
     }
-    function miniStrip(item, value) {
+    function miniStrip(item, value, refValues = []) {
         const W = 300;
         const H = 30;
         const ns = 'http://www.w3.org/2000/svg';
@@ -480,6 +561,14 @@ export async function start() {
             gl.setAttribute('d', `M${s(g).toFixed(1)} 2V28`);
             gl.setAttribute('class', 'rt-mini-galicia');
             svg.append(gl);
+        }
+        for (const rv of refValues) {
+            if (rv === null)
+                continue;
+            const ref = document.createElementNS(ns, 'path');
+            ref.setAttribute('d', `M${s(rv).toFixed(1)} 4V26`);
+            ref.setAttribute('class', 'rt-mini-ref');
+            svg.append(ref);
         }
         if (value !== null) {
             const me = document.createElementNS(ns, 'path');
@@ -511,7 +600,17 @@ export async function start() {
                     : 'portrait_below';
             parts.push(el('p', { class: 'rt-pos' }, fill(dict[key] ?? '', { pct: pos.pct })));
         }
-        parts.push(miniStrip(item, v));
+        const refValues = refs.map((c) => valueFor(c, item));
+        if (refs.length) {
+            const ul = el('ol', { class: 'rt-card-refs' });
+            refs.forEach((c, n) => {
+                const li = el('li');
+                li.append(el('span', { class: 'rt-ref-n', 'aria-hidden': 'true' }, String(n + 1)), el('span', { class: 'rt-ref-name' }, c.nome), el('span', { class: 'rt-ref-v' }, refValues[n] === null ? dict.portrait_no_data ?? '' : `${fmt(refValues[n])} ${item.ind.unit}`));
+                ul.append(li);
+            });
+            parts.push(ul);
+        }
+        parts.push(miniStrip(item, v, refValues));
         const meta = [];
         if (periodo)
             meta.push(`${dict.period}: ${periodo}`);
@@ -524,8 +623,20 @@ export async function start() {
         }
         card.replaceChildren(...parts);
     }
+    function renderRefs() {
+        refList.replaceChildren(...refs.map((c, n) => {
+            const li = el('li');
+            const remove = el('button', { type: 'button', 'aria-label': fill(dict.portrait_remove ?? '', { nome: c.nome }) }, '×');
+            remove.addEventListener('click', () => toggleRef(c));
+            li.append(el('span', { class: 'rt-ref-n', 'aria-hidden': 'true' }, String(n + 1)), el('span', {}, c.nome), remove);
+            return li;
+        }));
+        refInput.disabled = refs.length >= MAX_REFS;
+        refInput.placeholder = refs.length >= MAX_REFS ? (dict.portrait_compare_full ?? '') : '';
+    }
     function renderAll() {
         renderIntro();
+        renderRefs();
         for (const item of items)
             renderCard(item);
         for (const [k, c] of cards)
@@ -546,6 +657,7 @@ export async function start() {
         if (!c || c === selected)
             return;
         selected = c;
+        refs = refs.filter((r) => r !== c);
         renderAll();
         writeHash();
         draw();
@@ -561,6 +673,45 @@ export async function start() {
         writeHash();
         layout(true);
     }
+    function toggleRef(c) {
+        if (c === selected) {
+            status.textContent = dict.portrait_compare_same ?? '';
+            return;
+        }
+        if (refs.includes(c))
+            refs = refs.filter((r) => r !== c);
+        else if (refs.length < MAX_REFS)
+            refs = [...refs, c];
+        else {
+            status.textContent = dict.portrait_compare_full ?? '';
+            return;
+        }
+        status.textContent = '';
+        renderAll();
+        writeHash();
+        draw();
+    }
+    refInput.addEventListener('change', () => {
+        const value = refInput.value.trim();
+        if (!value)
+            return;
+        const c = byName.get(value.toLocaleLowerCase(lang));
+        if (!c) {
+            status.textContent = dict.portrait_not_found ?? '';
+            return;
+        }
+        refInput.value = '';
+        if (!refs.includes(c))
+            toggleRef(c);
+    });
+    // The compare field stays folded under a small link; opening it puts the cursor there.
+    refInput.closest('details')?.addEventListener('toggle', (e) => {
+        if (e.target.open)
+            refInput.focus();
+    });
+    refInput.addEventListener('input', () => {
+        status.textContent = '';
+    });
     search.addEventListener('change', () => {
         const c = byName.get(search.value.trim().toLocaleLowerCase(lang));
         if (c)
@@ -621,7 +772,15 @@ export async function start() {
         if (!animating)
             draw();
     });
-    canvas.addEventListener('click', (e) => select(hit(e) ?? undefined));
+    canvas.addEventListener('click', (e) => {
+        const c = hit(e);
+        if (!c)
+            return;
+        if (e.shiftKey)
+            toggleRef(c);
+        else
+            select(c);
+    });
     // Scrollytelling: the card crossing the middle of the viewport drives the stage.
     const observer = new IntersectionObserver((entries) => {
         for (const e of entries) {
@@ -647,6 +806,12 @@ export async function start() {
         }
         if (c)
             select(c);
+        const next = readRefs(p);
+        if (next.map((r) => r.code).join() !== refs.map((r) => r.code).join()) {
+            refs = next;
+            renderAll();
+            draw();
+        }
         const key = p.get('i');
         if (key && key !== active?.key) {
             activate(key);

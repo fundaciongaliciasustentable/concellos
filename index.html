@@ -34,8 +34,16 @@
       <label for="rt-q">Concello</label>
       <input id="rt-q" type="search" list="rt-concellos" autocomplete="off" spellcheck="false">
       <datalist id="rt-concellos"></datalist>
-      <p class="rt-status" role="status">Cargando…</p>
     </div>
+    <div class="rt-compare">
+      <ol class="rt-refs"></ol>
+      <details class="rt-compare-add">
+        <summary>Comparar con outros concellos</summary>
+        <input id="rt-ref" type="search" list="rt-concellos" autocomplete="off" spellcheck="false" aria-label="Comparar con outros concellos">
+        <p class="rt-hint">Ata tres. Tamén con maiúsculas + clic nun punto.</p>
+      </details>
+    </div>
+    <p class="rt-status" role="status">Cargando…</p>
     <div class="rt-list" id="contido"></div>
     <p class="rt-updated"></p>
   </div>

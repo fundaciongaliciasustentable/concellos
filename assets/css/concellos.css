@@ -656,3 +656,135 @@ a:hover {
       transition: none;
     }
   }
+
+/* Concellos de referencia */
+  .rt-compare {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .rt-compare-add summary {
+    width: fit-content;
+    font-size: var(--gs-texto-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    list-style: none;
+  }
+  .rt-compare-add summary::-webkit-details-marker {
+    display: none;
+  }
+  .rt-compare-add summary::before {
+    content: "+ ";
+  }
+  .rt-compare-add[open] summary::before {
+    content: "− ";
+  }
+  .rt-compare-add summary:hover {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .rt-compare-add[open] {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rt-compare input {
+    font: inherit;
+    font-size: var(--gs-texto-sm);
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--gs-radius);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .rt-compare input:disabled {
+    background: var(--surface-2);
+  }
+  .rt-refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rt-refs:empty {
+    display: none;
+  }
+  .rt-refs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 2px 0 4px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: var(--gs-texto-xs);
+  }
+  .rt-refs button {
+    font: inherit;
+    line-height: 1;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .rt-refs button:hover,
+  .rt-refs button:focus-visible {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .rt-hint {
+    margin: 0;
+    font-size: var(--gs-texto-xs);
+    color: var(--text-muted);
+  }
+  @media (hover: none) {
+    .rt-hint {
+      display: none;
+    }
+  }
+  .rt-ref-n {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 1.35em;
+    height: 1.35em;
+    border: 1.5px dashed var(--text);
+    border-radius: 50%;
+    font-size: var(--gs-texto-xs);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-card-refs {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--gs-texto-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-card-refs li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rt-ref-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rt-ref-v {
+    font-weight: 600;
+  }
+  .rt-mini-ref {
+    stroke: var(--text);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 2;
+    vector-effect: non-scaling-stroke;
+  }
